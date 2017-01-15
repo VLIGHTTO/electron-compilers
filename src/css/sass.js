@@ -50,8 +50,12 @@ export default class SassCompiler extends CompilerBase {
 
     let opts = Object.assign({}, this.compilerOptions, {
       indentedSyntax: filePath.match(/\.sass$/i),
-      sourceMapRoot: filePath,		
+      sourceMapRoot: filePath,
     });
+
+    if (opts.importerCallback) {
+      sass.importer(opts.importerCallback);
+    }
 
     let result = await new Promise((res,rej) => {
       sass.compile(sourceCode, opts, (r) => {
@@ -95,7 +99,7 @@ export default class SassCompiler extends CompilerBase {
 
     let opts = Object.assign({}, this.compilerOptions, {
       indentedSyntax: filePath.match(/\.sass$/i),
-      sourceMapRoot: filePath,		
+      sourceMapRoot: filePath,
     });
 
     let result;
@@ -115,7 +119,7 @@ export default class SassCompiler extends CompilerBase {
   }
 
   getCompilerVersion() {
-    // NB: There is a bizarre bug in the node module system where this doesn't 
+    // NB: There is a bizarre bug in the node module system where this doesn't
     // work but only in saveConfiguration tests
     //return require('@paulcbetts/node-sass/package.json').version;
     return "4.1.1";
